@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using DynamicFilter.App.Models;
 using DynamicFilter.App.Attributes;
 
-namespace DynamicFilter.App.Models
+namespace DynamicFilter.App
 {
     public class FilterModelGenerator
     {
