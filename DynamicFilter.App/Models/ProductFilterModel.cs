@@ -7,10 +7,10 @@ namespace DynamicFilter.App.Models
     [FilterFor(typeof(Product))]
     public class ProductFilterModel
     {
-        [FilterMethod(FilterMethods.Contains)]
-        public List<string> Caption { get; set; }
+        [FilterMethod(FilterMethods.Contains, nameof(Product.Caption))]
+        public List<string> Captions { get; set; }
 
-        [FilterMethod(FilterMethods.Equal, nameof(Product.Price))]
-        public decimal Price { get; set; }
+        [FilterMethod(FilterMethods.Equal)]
+        public decimal? Price { get; set; }
     }
 }
