@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using static DynamicFilter.App.Factories.ProductsFactory;
 
 
@@ -13,24 +11,34 @@ namespace DynamicFilter.App
     {
         static void Main(string[] args)
         {
-            var filters = new List<FilterModel>() {
-                new FilterModel("Caption", typeof(string), new List<string>(){ "Apple", "Pear" }, "Contains"),
-                new FilterModel("Price", typeof(decimal), 3, "Equal")
+            //Fitler Model Generator
+            var productFilter = new ProductFilterModel
+            {
+                Caption = new List<string>() { "Apple", "Pear" },
+                Price = 3
             };
 
-            var queryGenerator = new QueryGenerator<Product>(filters, ProductsList.AsQueryable());
+            var filterGenerator = new FilterModelGenerator();
+            filterGenerator.GenerateFilterModel(productFilter);
+
+
+            //Query Generator
+
+            var queryGenerator = new QueryGenerator<Product>();
             IQueryable<Product> result;
+
             //Filter Parameter
-            foreach (var filter in filters)
+            foreach (var filter in filterGenerator.Filters)
             {
                 queryGenerator = (QueryGenerator<Product>)
                                 typeof(QueryGenerator<Product>)
                                 .GetMethod(filter.MethodName)
                                 .Invoke(queryGenerator, new[] { filter });
+
                 queryGenerator.AddFilter();
             }
 
-            result = queryGenerator.ApplyFilter();
+            result = queryGenerator.ApplyFilter(ProductsList.AsQueryable());
 
             foreach (var item in result.ToList())
             {

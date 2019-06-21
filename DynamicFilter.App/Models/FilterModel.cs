@@ -4,6 +4,11 @@ namespace DynamicFilter.App.Models
 {
     public class FilterModel
     {
+        #region Constructor
+        public FilterModel()
+        {
+        }
+
         public FilterModel(string propertyname, Type valueType, object value, string methodName)
         {
             PropertyName = propertyname;
@@ -11,25 +16,30 @@ namespace DynamicFilter.App.Models
             Value = value;
             MethodName = methodName;
         }
+        #endregion
 
-
+        #region Properties
         public string PropertyName { get; set; }
         public Type ValueType { get; set; }
         public object Value { get; set; }
         public string MethodName { get; set; }
+        #endregion
+
+        #region Methods
+        public bool IsValid()
+        {
+            //TODO: Save invaled fields and error messages
+            if (!string.IsNullOrEmpty(PropertyName))
+                return false;
+            if (ValueType == null)
+                return false;
+            if (Value == null)
+                return false;
+            if (!string.IsNullOrEmpty(MethodName))
+                return false;
+            return true;
+        }
+        #endregion
     }
 }
-
-
-//public class Person
-//{
-//    ["Caption"]
-//    public string Name { get; set; }
-//    ["Contains"]
-//    public string LastName { get; set; }
-//    ["equal"]
-//    public int Age { get; set; }
-
-//    Person p = new Person();
-//}
 

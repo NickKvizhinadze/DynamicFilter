@@ -10,8 +10,6 @@ namespace DynamicFilter.App
     public class QueryGenerator<T>
     {
         #region Fields
-        private readonly List<FilterModel> _filter;
-        private readonly IQueryable<T> _data;
         private readonly ParameterExpression _parameter;
         private Expression _body;
         private Expression _tempBody;
@@ -20,11 +18,9 @@ namespace DynamicFilter.App
         #endregion
 
         #region Constructor
-        public QueryGenerator(List<FilterModel> filter, IQueryable<T> data)
+        public QueryGenerator()
         {
-            _parameter = Expression.Parameter(typeof(T), "object");
-            _filter = filter;
-            _data = data;
+            _parameter = Expression.Parameter(typeof(T), "item");
         }
         #endregion
 
@@ -113,38 +109,22 @@ namespace DynamicFilter.App
                 _body = _tempBody;
             else
                 _body = Expression.AndAlso(_body, _tempBody);
-            //_whereCall = Expression.Call(
-            //   typeof(Queryable),
-            //   "Where",
-            //   new Type[] { _data.ElementType },
-            //   _data.Expression,
-            //   Expression.Lambda<Func<T, bool>>(_body, new ParameterExpression[] { _parameter })
-            //   );
             return this;
         }
 
 
-        public IQueryable<T> ApplyFilter()
+        public IQueryable<T> ApplyFilter(IQueryable<T> data)
         {
             _whereCall = Expression.Call(
                typeof(Queryable),
                "Where",
-               new Type[] { _data.ElementType },
-               _data.Expression,
+               new Type[] { data.ElementType },
+               data.Expression,
                Expression.Lambda<Func<T, bool>>(_body, new ParameterExpression[] { _parameter })
                );
-            return _data.Provider.CreateQuery<T>(_whereCall);
+            return data.Provider.CreateQuery<T>(_whereCall);
         }
 
         #endregion
-
-        #region Private Methods
-        public FilterModel GetFilterByPropertyName(string propertyName)
-        {
-            return _filter.FirstOrDefault(f => f.PropertyName == propertyName);
-        }
-
-        #endregion
-
     }
 }
