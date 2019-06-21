@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DynamicFilter.App.Attributes
+namespace DynamicFilter.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class FilterForAttribute: Attribute

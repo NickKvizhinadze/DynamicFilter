@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
-using System.Linq;
-using DynamicFilter.App.Models;
+using DynamicFilter.Models;
 
-namespace DynamicFilter.App
+namespace DynamicFilter
 {
     public class QueryGenerator<T>
     {

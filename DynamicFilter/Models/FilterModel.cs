@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DynamicFilter.App.Models
+namespace DynamicFilter.Models
 {
     public class FilterModel
     {

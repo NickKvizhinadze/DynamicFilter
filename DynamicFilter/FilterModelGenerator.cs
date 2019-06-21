@@ -1,19 +1,19 @@
-﻿using System;
-using System.Linq;
+﻿using DynamicFilter.Attributes;
+using DynamicFilter.Models;
+using System;
 using System.Collections.Generic;
-using DynamicFilter.App.Models;
-using DynamicFilter.App.Attributes;
+using System.Linq;
 
-namespace DynamicFilter.App
+namespace DynamicFilter
 {
-    public class FilterModelGenerator
+    public class FilterModelGenerator<T>
     {
         private Type _forType;
         public List<FilterModel> Filters { get; private set; }
 
-        public void GenerateFilterModel(ProductFilterModel model)
+        public void GenerateFilterModel(T model)
         {
-            var classAttributes = typeof(ProductFilterModel).GetCustomAttributes(typeof(FilterForAttribute), false);
+            var classAttributes = typeof(T).GetCustomAttributes(typeof(FilterForAttribute), false);
             if (!(classAttributes?.Any() == true))
                 throw new Exception("Filter not applied"); //TODO: Create custom FilterNotAppliedException
 

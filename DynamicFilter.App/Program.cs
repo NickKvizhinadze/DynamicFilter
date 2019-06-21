@@ -18,7 +18,7 @@ namespace DynamicFilter.App
                 Price = 3
             };
 
-            var filterGenerator = new FilterModelGenerator();
+            var filterGenerator = new FilterModelGenerator<ProductFilterModel>();
             filterGenerator.GenerateFilterModel(productFilter);
 
 

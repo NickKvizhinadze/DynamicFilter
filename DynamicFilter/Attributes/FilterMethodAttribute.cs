@@ -1,10 +1,10 @@
 ﻿using System;
-using DynamicFilter.App.Enums;
+using DynamicFilter.Enums;
 
-namespace DynamicFilter.App.Attributes
+namespace DynamicFilter.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class FilterMethodAttribute: Attribute
+    public class FilterMethodAttribute : Attribute
     {
         public FilterMethodAttribute(FilterMethods methodName, string propertyName = null)
         {

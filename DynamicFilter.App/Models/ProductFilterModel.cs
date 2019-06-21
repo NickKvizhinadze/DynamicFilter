@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using DynamicFilter.App.Attributes;
-using DynamicFilter.App.Enums;
+using DynamicFilter.Attributes;
+using DynamicFilter.Enums;
 
 namespace DynamicFilter.App.Models
 {

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicFilter.App", "DynamicFilter.App\DynamicFilter.App.csproj", "{D9D35F7C-967D-4B9D-B0D6-FB7D1A767652}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicFilter.App", "DynamicFilter.App\DynamicFilter.App.csproj", "{D9D35F7C-967D-4B9D-B0D6-FB7D1A767652}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicFilter", "DynamicFilter\DynamicFilter.csproj", "{05F314C7-B3F7-4564-BFD5-6384A746F35A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D9D35F7C-967D-4B9D-B0D6-FB7D1A767652}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D35F7C-967D-4B9D-B0D6-FB7D1A767652}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9D35F7C-967D-4B9D-B0D6-FB7D1A767652}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05F314C7-B3F7-4564-BFD5-6384A746F35A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05F314C7-B3F7-4564-BFD5-6384A746F35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05F314C7-B3F7-4564-BFD5-6384A746F35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05F314C7-B3F7-4564-BFD5-6384A746F35A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

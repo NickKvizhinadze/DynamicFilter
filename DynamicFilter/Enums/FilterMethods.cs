@@ -1,4 +1,4 @@
-﻿namespace DynamicFilter.App.Enums
+﻿namespace DynamicFilter.Enums
 {
     public enum FilterMethods
     {
