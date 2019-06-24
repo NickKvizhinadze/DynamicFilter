@@ -32,7 +32,7 @@ namespace DynamicFilter
                 filter.PropertyName = methodAttribute.PropertyName ?? prop.Name;
                 filter.Value = prop.GetValue(model);
                 filter.ValueType = _forType.GetProperty(filter.PropertyName).PropertyType;
-                if (filter.IsValid())
+                if (!filter.IsValid())
                     continue;
                 if (Filters == null)
                     Filters = new List<FilterModel>();

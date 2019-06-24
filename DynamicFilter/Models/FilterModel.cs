@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DynamicFilter.Extentions;
+using System;
 
 namespace DynamicFilter.Models
 {
@@ -29,13 +30,16 @@ namespace DynamicFilter.Models
         public bool IsValid()
         {
             //TODO: Save invaled fields and error messages
-            if (!string.IsNullOrEmpty(PropertyName))
+            if (string.IsNullOrEmpty(PropertyName))
                 return false;
+
             if (ValueType == null)
                 return false;
-            if (Value == null)
+            
+            if (Value == null || Value.IsNotNullOrEmptyArray())
                 return false;
-            if (!string.IsNullOrEmpty(MethodName))
+
+            if (string.IsNullOrEmpty(MethodName))
                 return false;
             return true;
         }
