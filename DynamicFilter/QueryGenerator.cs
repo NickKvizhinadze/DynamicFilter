@@ -30,7 +30,7 @@ namespace DynamicFilter
         #region Filter Methods
         public QueryGenerator<T> StringContains(FilterModel filter, bool matchCase)
         {
-            if (filter.ValueType != typeof(string))
+            if (filter.PropertyType != typeof(string))
                 throw new TypeLoadException("Incorrect type");
 
             Expression propertyExpression = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
@@ -46,22 +46,40 @@ namespace DynamicFilter
 
         public QueryGenerator<T> Contains(FilterModel filter)
         {
-            Expression propertyExpression = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression left = propertyExpression;
+            Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
 
-            var listType = typeof(List<>).MakeGenericType(new[] { filter.ValueType });
-            MethodInfo method = listType.GetMethod("Contains", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo method = filter.ValueType.GetMethod("Contains", BindingFlags.Public | BindingFlags.Instance);
 
-            Expression right = Expression.Constant(filter.Value, listType);
+            Expression right = Expression.Constant(filter.Value, filter.ValueType);
 
             _tempBody = Expression.Call(right, method, left);
+            return this;
+        }
+
+        public QueryGenerator<T> HasValueAndContains(FilterModel filter)
+        {
+            Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
+            Expression e1 = HasValue(filter, left);
+
+            MethodInfo method = filter.ValueType.GetMethod("Contains", BindingFlags.Public | BindingFlags.Instance);
+
+            if (filter.PropertyType.IsGenericType && filter.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var newType = filter.PropertyType.GetGenericArguments()[0];
+                left = Expression.Convert(left, newType);
+            }
+
+            Expression right = Expression.Constant(filter.Value, filter.ValueType);
+
+            Expression e2 = Expression.Call(right, method, left);
+            _tempBody = Expression.OrElse(e1, e2);
             return this;
         }
 
         public QueryGenerator<T> Equal(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.ValueType), filter.ValueType);
+            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType), filter.PropertyType);
             _tempBody = Expression.Equal(left, right);
             return this;
         }
@@ -112,7 +130,6 @@ namespace DynamicFilter
             return this;
         }
 
-
         public IQueryable<T> ApplyFilter(IQueryable<T> data)
         {
             _whereCall = Expression.Call(
@@ -125,6 +142,16 @@ namespace DynamicFilter
             return data.Provider.CreateQuery<T>(_whereCall);
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private Expression HasValue(FilterModel filter, Expression left)
+        {
+            Expression right1 = Expression.Constant(null, filter.PropertyType);
+            Expression e1 = Expression.NotEqual(left, right1);
+            return e1;
+        }
         #endregion
     }
 }

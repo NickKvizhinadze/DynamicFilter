@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 
 namespace DynamicFilter.Extentions
 {
@@ -6,8 +8,14 @@ namespace DynamicFilter.Extentions
     {
         public static bool IsNotNullOrEmptyArray(this object source)
         {
-            return (source.GetType().IsArray || source.GetType().GetInterface("IEnumerable") != null) && (source as Array) == null;
+            if (source.GetType().GetInterface("IEnumerable") != null)
+            {
+                var list = source as IList;
+                return list == null || list.Count == 0;
+            }
+
+            return false;
         }
-        
+
     }
 }

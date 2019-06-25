@@ -4,6 +4,7 @@
     {
         Equal,
         Contains,
-        StringContains
+        StringContains,
+        HasValueAndContains
     }
 }

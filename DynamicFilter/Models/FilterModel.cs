@@ -13,7 +13,7 @@ namespace DynamicFilter.Models
         public FilterModel(string propertyname, Type valueType, object value, string methodName)
         {
             PropertyName = propertyname;
-            ValueType = valueType;
+            PropertyType = valueType;
             Value = value;
             MethodName = methodName;
         }
@@ -21,6 +21,7 @@ namespace DynamicFilter.Models
 
         #region Properties
         public string PropertyName { get; set; }
+        public Type PropertyType { get; set; }
         public Type ValueType { get; set; }
         public object Value { get; set; }
         public string MethodName { get; set; }
@@ -33,7 +34,7 @@ namespace DynamicFilter.Models
             if (string.IsNullOrEmpty(PropertyName))
                 return false;
 
-            if (ValueType == null)
+            if (PropertyType == null)
                 return false;
             
             if (Value == null || Value.IsNotNullOrEmptyArray())

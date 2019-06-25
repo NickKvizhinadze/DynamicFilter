@@ -15,6 +15,9 @@ namespace DynamicFilter.Extentions
             var queryGenerator = new QueryGenerator<TList>();
 
             //Filter Parameter
+            if (filterGenerator.Filters == null)
+                return list;
+
             foreach (var item in filterGenerator.Filters)
             {
                 queryGenerator = (QueryGenerator<TList>)
