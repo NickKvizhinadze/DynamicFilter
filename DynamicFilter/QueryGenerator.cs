@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using DynamicFilter.Models;
+using DynamicFilter.Extentions;
 
 namespace DynamicFilter
 {
@@ -63,16 +64,16 @@ namespace DynamicFilter
 
             MethodInfo method = filter.ValueType.GetMethod("Contains", BindingFlags.Public | BindingFlags.Instance);
 
-            if (filter.PropertyType.IsGenericType && filter.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if (filter.PropertyType.IfObjectIsNullable())
             {
-                var newType = filter.PropertyType.GetGenericArguments()[0];
+                var newType = filter.PropertyType.GetTypeFromNullable();
                 left = Expression.Convert(left, newType);
             }
 
             Expression right = Expression.Constant(filter.Value, filter.ValueType);
 
             Expression e2 = Expression.Call(right, method, left);
-            _tempBody = Expression.OrElse(e1, e2);
+            _tempBody = Expression.AndAlso(e1, e2);
             return this;
         }
 
@@ -83,7 +84,21 @@ namespace DynamicFilter
             _tempBody = Expression.Equal(left, right);
             return this;
         }
+        public QueryGenerator<T> HasValueAndEqual(FilterModel filter)
+        {
+            Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
+            Expression e1 = HasValue(filter, left);
 
+            var propertyType = filter.PropertyType.GetTypeIfNullable();
+
+            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, propertyType), filter.PropertyType);
+            Expression e2 = Expression.Equal(left, right);
+
+            _tempBody = Expression.AndAlso(e1, e2);
+            return this;
+        }
+
+        //TODO: every method below for nullable
         public QueryGenerator<T> GreaterThen(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));

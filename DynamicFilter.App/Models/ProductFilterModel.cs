@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DynamicFilter.Attributes;
 using DynamicFilter.Enums;
 
@@ -12,5 +13,8 @@ namespace DynamicFilter.App.Models
 
         [FilterMethod(FilterMethods.Equal)]
         public decimal? Price { get; set; }
+
+        [FilterMethod(FilterMethods.HasValueAndEqual)]
+        public DateTime? ReceiveDate { get; set; }
     }
 }

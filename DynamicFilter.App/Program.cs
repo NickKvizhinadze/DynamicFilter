@@ -16,11 +16,17 @@ namespace DynamicFilter.App
             var productFilter = new ProductFilterModel
             {
                 Captions = new List<string>() { "Apple", "Pear" },
-                Price = 3
+                Price = 3,
+                ReceiveDate = new DateTime(2019, 05, 06)
             };
 
+            var test = ProductsList
+                .Where(item => productFilter.Captions.Contains(item.Caption) &&
+                item.Price == productFilter.Price &&
+                (item.ReceiveDate != null) && (item.ReceiveDate == productFilter.ReceiveDate)).ToList();
             //Filter data
             IQueryable<Product> result = FilterHelper.Filter(productFilter, ProductsList.AsQueryable());
+
 
             //Show filtered data
             foreach (var item in result.ToList())

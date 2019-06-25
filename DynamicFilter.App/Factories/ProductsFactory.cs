@@ -18,7 +18,7 @@ namespace DynamicFilter.App.Factories
                         Description = "Green Apple",
                         Price = 3,
                         Quantity = 15,
-                        ReceiveDate = DateTime.Now.AddDays(-15)
+                        ReceiveDate = new DateTime(2019, 05, 06)
                     },
                     new Product {
                         Id = 2,
@@ -26,7 +26,7 @@ namespace DynamicFilter.App.Factories
                         Description = "Golden Pear",
                         Price = 2.3M,
                         Quantity = 25,
-                        ReceiveDate = DateTime.Now.AddDays(-11)
+                        ReceiveDate = new DateTime(2019, 05, 15)
                     },
                     new Product {
                         Id = 3,
@@ -34,7 +34,7 @@ namespace DynamicFilter.App.Factories
                         Description = "Georgian Orange",
                         Price = 1.25M,
                         Quantity = 18,
-                        ReceiveDate = DateTime.Now.AddDays(-9)
+                        ReceiveDate = new DateTime(2019, 05, 15)
                     },
                     new Product {
                         Id = 4,
@@ -42,7 +42,7 @@ namespace DynamicFilter.App.Factories
                         Description = "Foreign Tangerine",
                         Price = 1.8M,
                         Quantity = 5,
-                        ReceiveDate = DateTime.Now
+                        ReceiveDate = new DateTime(2019, 05, 21)
                     },
                     new Product {
                         Id = 1,
@@ -50,7 +50,7 @@ namespace DynamicFilter.App.Factories
                         Description = "Winter Apple",
                         Price = 3,
                         Quantity = 10,
-                        ReceiveDate = DateTime.Now.AddDays(-25)
+                        ReceiveDate = new DateTime(2019, 05, 30)
                     },
                 };
             }

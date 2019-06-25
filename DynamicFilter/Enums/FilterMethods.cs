@@ -5,6 +5,8 @@
         Equal,
         Contains,
         StringContains,
-        HasValueAndContains
+        HasValueAndContains,
+        HasValueAndEqual,
+        GreaterThen
     }
 }
