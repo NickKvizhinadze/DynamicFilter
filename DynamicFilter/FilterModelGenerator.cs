@@ -1,12 +1,12 @@
-﻿using DynamicFilter.Attributes;
-using DynamicFilter.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using DynamicFilter.Models;
+using DynamicFilter.Attributes;
 
 namespace DynamicFilter
 {
-    internal class FilterModelGenerator<T>
+    internal class FilterModelGenerator<T> where T : BaseFilter
     {
         private Type _forType;
         internal List<FilterModel> Filters { get; private set; }
@@ -19,6 +19,9 @@ namespace DynamicFilter
                 throw new Exception("Filter not applied"); //TODO: Create custom FilterNotAppliedException
 
             _forType = filterForAttribute.ForType;
+
+            model.Configure();
+            var validationPredicates = model.GetPredicates();
 
             var props = model.GetType().GetProperties();
             foreach (var prop in props)
@@ -38,6 +41,15 @@ namespace DynamicFilter
 
                 if (!filter.IsValid())
                     continue;
+
+                //Custom Validations
+                if (validationPredicates.TryGetValue(filter.PropertyName, out Func<object, bool> predicate))
+                {
+                    var shouldExecute = predicate.Invoke(filter.Value);
+                    if (!shouldExecute)
+                        continue;
+                }
+                                
                 if (Filters == null)
                     Filters = new List<FilterModel>();
                 Filters.Add(filter);

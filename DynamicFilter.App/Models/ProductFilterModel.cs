@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using DynamicFilter.Attributes;
 using DynamicFilter.Enums;
+using DynamicFilter.Models;
+using DynamicFilter.Attributes;
 
 namespace DynamicFilter.App.Models
 {
     [FilterFor(typeof(Product))]
-    public class ProductFilterModel
+    public class ProductFilterModel : BaseFilter
     {
         [FilterMethod(FilterMethods.Contains, nameof(Product.Caption))]
         public List<string> Captions { get; set; }
@@ -19,5 +20,15 @@ namespace DynamicFilter.App.Models
 
         [FilterMethod(FilterMethods.LessThanOrEqual, nameof(Product.ReceiveDate))]
         public DateTime? ReceiveDateTo { get; set; }
+
+        public override void Configure()
+        {
+            ValidationBuilder
+                .For<ProductFilterModel>()
+                .Property(f => f.Price)
+                .AddValidation(x => x != null && (decimal)x > 0);
+
+            var test = _predicates;
+        }
     }
 }

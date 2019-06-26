@@ -3,14 +3,14 @@ using System;
 
 namespace DynamicFilter.Models
 {
-    class FilterModel
+    internal class FilterModel
     {
         #region Constructor
-        public FilterModel()
+        internal FilterModel()
         {
         }
 
-        public FilterModel(string propertyname, Type valueType, object value, string methodName)
+        internal FilterModel(string propertyname, Type valueType, object value, string methodName)
         {
             PropertyName = propertyname;
             PropertyType = valueType;
@@ -20,15 +20,15 @@ namespace DynamicFilter.Models
         #endregion
 
         #region Properties
-        public string PropertyName { get; set; }
-        public Type PropertyType { get; set; }
-        public Type ValueType { get; set; }
-        public object Value { get; set; }
-        public string MethodName { get; set; }
+        internal string PropertyName { get; set; }
+        internal Type PropertyType { get; set; }
+        internal Type ValueType { get; set; }
+        internal object Value { get; set; }
+        internal string MethodName { get; set; }
         #endregion
 
         #region Methods
-        public bool IsValid()
+        internal bool IsValid()
         {
             //TODO: Save invaled fields and error messages
             if (string.IsNullOrEmpty(PropertyName))
