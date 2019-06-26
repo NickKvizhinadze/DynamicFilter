@@ -8,7 +8,7 @@ namespace DynamicFilter.Extentions
 {
     public static class TypeExtentions
     {
-        public static bool IfObjectIsNullable(this Type source)
+        public static bool IsObjectNullable(this Type source)
         {
             return source.IsGenericType && source.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
@@ -20,7 +20,7 @@ namespace DynamicFilter.Extentions
 
         public static Type GetTypeIfNullable(this Type source)
         {
-            if (source.IfObjectIsNullable())
+            if (source.IsObjectNullable())
             {
                 return source.GetGenericArguments()[0];
             }

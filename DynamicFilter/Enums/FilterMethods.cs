@@ -7,6 +7,9 @@
         StringContains,
         HasValueAndContains,
         HasValueAndEqual,
-        GreaterThen
+        GreaterThan,
+        GreaterThanOrEqual,
+        LessThan,
+        LessThanOrEqual
     }
 }

@@ -64,7 +64,7 @@ namespace DynamicFilter
 
             MethodInfo method = filter.ValueType.GetMethod("Contains", BindingFlags.Public | BindingFlags.Instance);
 
-            if (filter.PropertyType.IfObjectIsNullable())
+            if (filter.PropertyType.IsObjectNullable())
             {
                 var newType = filter.PropertyType.GetTypeFromNullable();
                 left = Expression.Convert(left, newType);
@@ -84,6 +84,7 @@ namespace DynamicFilter
             _tempBody = Expression.Equal(left, right);
             return this;
         }
+
         public QueryGenerator<T> HasValueAndEqual(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
@@ -99,35 +100,97 @@ namespace DynamicFilter
         }
 
         //TODO: every method below for nullable
-        public QueryGenerator<T> GreaterThen(FilterModel filter)
+        public QueryGenerator<T> GreaterThan(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression right = Expression.Constant(filter.Value);
-            _body = Expression.GreaterThan(left, right);
+            Expression e1 = null;
+            if (filter.PropertyType.IsObjectNullable())
+            {
+                e1 = HasValue(filter, left);
+                filter.PropertyType = filter.PropertyType.GetTypeFromNullable();
+                left = Expression.Convert(left, filter.PropertyType);
+            }
+
+            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+
+            if (e1 != null)
+            {
+                Expression e2 = Expression.GreaterThan(left, right);
+                _tempBody = Expression.AndAlso(e1, e2);
+            }
+            else
+                _tempBody = Expression.GreaterThan(left, right);
+
             return this;
         }
 
-        public QueryGenerator<T> GreaterThenOrEqual(FilterModel filter)
+        public QueryGenerator<T> GreaterThanOrEqual(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression right = Expression.Constant(filter.Value);
-            _body = Expression.GreaterThanOrEqual(left, right);
+            Expression e1 = null;
+            if (filter.PropertyType.IsObjectNullable())
+            {
+                e1 = HasValue(filter, left);
+                filter.PropertyType = filter.PropertyType.GetTypeFromNullable();
+                left = Expression.Convert(left, filter.PropertyType);
+            }
+
+            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+
+            if (e1 != null)
+            {
+                Expression e2 = Expression.GreaterThanOrEqual(left, right);
+                _tempBody = Expression.AndAlso(e1, e2);
+            }
+            else
+                _tempBody = Expression.GreaterThanOrEqual(left, right);
             return this;
         }
 
         public QueryGenerator<T> LessThan(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression right = Expression.Constant(filter.Value);
-            _body = Expression.LessThan(left, right);
+            Expression e1 = null;
+            if (filter.PropertyType.IsObjectNullable())
+            {
+                e1 = HasValue(filter, left);
+                filter.PropertyType = filter.PropertyType.GetTypeFromNullable();
+                left = Expression.Convert(left, filter.PropertyType);
+            }
+
+            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+
+            if (e1 != null)
+            {
+                Expression e2 = Expression.LessThan(left, right);
+                _tempBody = Expression.AndAlso(e1, e2);
+            }
+            else
+                _tempBody = Expression.LessThan(left, right);
             return this;
         }
 
         public QueryGenerator<T> LessThanOrEqual(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression right = Expression.Constant(filter.Value);
-            _body = Expression.LessThanOrEqual(left, right);
+            Expression e1 = null;
+
+            if (filter.PropertyType.IsObjectNullable())
+            {
+                e1 = HasValue(filter, left);
+                filter.PropertyType = filter.PropertyType.GetTypeFromNullable();
+                left = Expression.Convert(left, filter.PropertyType);
+            }
+
+            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+            if (e1 != null)
+            {
+                Expression e2 = Expression.LessThanOrEqual(left, right);
+                _tempBody = Expression.AndAlso(e1, e2);
+            }
+            else
+                _tempBody = Expression.LessThanOrEqual(left, right);
+
             return this;
         }
 

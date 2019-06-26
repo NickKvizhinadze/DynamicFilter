@@ -14,19 +14,20 @@ namespace DynamicFilter
         public void GenerateFilterModel(T model)
         {
             var classAttributes = typeof(T).GetCustomAttributes(typeof(FilterForAttribute), false);
-            if (!(classAttributes?.Any() == true))
+            var filterForAttribute = classAttributes.FirstOrDefault() as FilterForAttribute;
+            if (filterForAttribute == null)
                 throw new Exception("Filter not applied"); //TODO: Create custom FilterNotAppliedException
 
-            var filterForAttribute = classAttributes.First() as FilterForAttribute;
             _forType = filterForAttribute.ForType;
 
             var props = model.GetType().GetProperties();
             foreach (var prop in props)
             {
-                var attribute = prop.GetCustomAttributes(typeof(FilterMethodAttribute), false);
-                if (!(attribute?.Any() == true))
+                var propertyAttributes = prop.GetCustomAttributes(typeof(FilterMethodAttribute), false);
+                if (propertyAttributes?.Any() != true)
                     continue;
-                var methodAttribute = attribute.First() as FilterMethodAttribute;
+
+                var methodAttribute = propertyAttributes.First() as FilterMethodAttribute;
                 var filter = new FilterModel();
                 filter.MethodName = methodAttribute.MethodName;
                 filter.PropertyName = methodAttribute.PropertyName ?? prop.Name;

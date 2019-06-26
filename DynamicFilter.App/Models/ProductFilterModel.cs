@@ -14,7 +14,10 @@ namespace DynamicFilter.App.Models
         [FilterMethod(FilterMethods.Equal)]
         public decimal? Price { get; set; }
 
-        [FilterMethod(FilterMethods.HasValueAndEqual)]
-        public DateTime? ReceiveDate { get; set; }
+        [FilterMethod(FilterMethods.GreaterThanOrEqual, nameof(Product.ReceiveDate))]
+        public DateTime? ReceiveDateFrom { get; set; }
+
+        [FilterMethod(FilterMethods.LessThanOrEqual, nameof(Product.ReceiveDate))]
+        public DateTime? ReceiveDateTo { get; set; }
     }
 }

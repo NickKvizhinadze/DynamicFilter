@@ -17,13 +17,9 @@ namespace DynamicFilter.App
             {
                 Captions = new List<string>() { "Apple", "Pear" },
                 Price = 3,
-                ReceiveDate = new DateTime(2019, 05, 06)
+                ReceiveDate = new DateTime(2019, 05, 07)
             };
 
-            var test = ProductsList
-                .Where(item => productFilter.Captions.Contains(item.Caption) &&
-                item.Price == productFilter.Price &&
-                (item.ReceiveDate != null) && (item.ReceiveDate == productFilter.ReceiveDate)).ToList();
             //Filter data
             IQueryable<Product> result = FilterHelper.Filter(productFilter, ProductsList.AsQueryable());
 
@@ -31,7 +27,7 @@ namespace DynamicFilter.App
             //Show filtered data
             foreach (var item in result.ToList())
             {
-                Console.WriteLine($"Name: {item.Caption}, Description: {item.Description}, Price: {item.Price}, Quantity: {item.Quantity}");
+                Console.WriteLine($"Name: {item.Caption}, Description: {item.Description}, Price: {item.Price}, Quantity: {item.Quantity}, ReceiveDate: {item.ReceiveDate}");
             }
 
 
