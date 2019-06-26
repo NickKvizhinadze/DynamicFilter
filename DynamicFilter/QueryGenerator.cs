@@ -8,7 +8,7 @@ using DynamicFilter.Extentions;
 
 namespace DynamicFilter
 {
-    public class QueryGenerator<T>
+    internal class QueryGenerator<T>
     {
         #region Fields
         private readonly ParameterExpression _parameter;
@@ -19,7 +19,7 @@ namespace DynamicFilter
         #endregion
 
         #region Constructor
-        public QueryGenerator()
+        internal QueryGenerator()
         {
             _parameter = Expression.Parameter(typeof(T), "item");
         }
@@ -29,7 +29,7 @@ namespace DynamicFilter
         #region Methods
 
         #region Filter Methods
-        public QueryGenerator<T> StringContains(FilterModel filter, bool matchCase)
+        internal QueryGenerator<T> StringContains(FilterModel filter, bool matchCase)
         {
             if (filter.PropertyType != typeof(string))
                 throw new TypeLoadException("Incorrect type");
@@ -45,7 +45,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> Contains(FilterModel filter)
+        internal QueryGenerator<T> Contains(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
 
@@ -57,7 +57,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> HasValueAndContains(FilterModel filter)
+        internal QueryGenerator<T> HasValueAndContains(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression e1 = HasValue(filter, left);
@@ -77,7 +77,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> Equal(FilterModel filter)
+        internal QueryGenerator<T> Equal(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType), filter.PropertyType);
@@ -85,7 +85,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> HasValueAndEqual(FilterModel filter)
+        internal QueryGenerator<T> HasValueAndEqual(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression e1 = HasValue(filter, left);
@@ -99,8 +99,7 @@ namespace DynamicFilter
             return this;
         }
 
-        //TODO: every method below for nullable
-        public QueryGenerator<T> GreaterThan(FilterModel filter)
+        internal QueryGenerator<T> GreaterThan(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression e1 = null;
@@ -124,7 +123,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> GreaterThanOrEqual(FilterModel filter)
+        internal QueryGenerator<T> GreaterThanOrEqual(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression e1 = null;
@@ -147,7 +146,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> LessThan(FilterModel filter)
+        internal QueryGenerator<T> LessThan(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression e1 = null;
@@ -170,7 +169,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public QueryGenerator<T> LessThanOrEqual(FilterModel filter)
+        internal QueryGenerator<T> LessThanOrEqual(FilterModel filter)
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression e1 = null;
@@ -196,7 +195,7 @@ namespace DynamicFilter
 
         #endregion
 
-        public QueryGenerator<T> AddFilter()
+        internal QueryGenerator<T> AddFilter()
         {
             if (_tempBody == null)
                 throw new Exception("Body is null");
@@ -208,7 +207,7 @@ namespace DynamicFilter
             return this;
         }
 
-        public IQueryable<T> ApplyFilter(IQueryable<T> data)
+        internal IQueryable<T> ApplyFilter(IQueryable<T> data)
         {
             _whereCall = Expression.Call(
                typeof(Queryable),

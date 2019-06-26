@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace DynamicFilter.Extentions
 {
-    public static class TypeExtentions
+    internal static class TypeExtentions
     {
-        public static bool IsObjectNullable(this Type source)
+        internal static bool IsObjectNullable(this Type source)
         {
             return source.IsGenericType && source.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
-        public static Type GetTypeFromNullable(this Type source)
+        internal static Type GetTypeFromNullable(this Type source)
         {
             return source.GetGenericArguments()[0];
         }
 
-        public static Type GetTypeIfNullable(this Type source)
+        internal static Type GetTypeIfNullable(this Type source)
         {
             if (source.IsObjectNullable())
             {

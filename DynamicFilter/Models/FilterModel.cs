@@ -3,7 +3,7 @@ using System;
 
 namespace DynamicFilter.Models
 {
-    public class FilterModel
+    class FilterModel
     {
         #region Constructor
         public FilterModel()

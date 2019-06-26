@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace DynamicFilter
 {
-    public class FilterModelGenerator<T>
+    internal class FilterModelGenerator<T>
     {
         private Type _forType;
-        public List<FilterModel> Filters { get; private set; }
+        internal List<FilterModel> Filters { get; private set; }
 
-        public void GenerateFilterModel(T model)
+        internal void GenerateFilterModel(T model)
         {
             var classAttributes = typeof(T).GetCustomAttributes(typeof(FilterForAttribute), false);
             var filterForAttribute = classAttributes.FirstOrDefault() as FilterForAttribute;
@@ -29,11 +29,13 @@ namespace DynamicFilter
 
                 var methodAttribute = propertyAttributes.First() as FilterMethodAttribute;
                 var filter = new FilterModel();
+
                 filter.MethodName = methodAttribute.MethodName;
                 filter.PropertyName = methodAttribute.PropertyName ?? prop.Name;
                 filter.Value = prop.GetValue(model);
                 filter.PropertyType = _forType.GetProperty(filter.PropertyName).PropertyType;
                 filter.ValueType = prop.PropertyType;
+
                 if (!filter.IsValid())
                     continue;
                 if (Filters == null)

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace DynamicFilter.Extentions
+namespace DynamicFilter.Helpers
 {
     public static class FilterHelper
     {

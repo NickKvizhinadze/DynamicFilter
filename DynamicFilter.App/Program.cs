@@ -1,5 +1,5 @@
 ﻿using DynamicFilter.App.Models;
-using DynamicFilter.Extentions;
+using DynamicFilter.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,8 @@ namespace DynamicFilter.App
             {
                 Captions = new List<string>() { "Apple", "Pear" },
                 Price = 3,
-                ReceiveDate = new DateTime(2019, 05, 07)
+                ReceiveDateFrom = new DateTime(2019, 05, 07),
+                ReceiveDateTo = new DateTime(2019, 07, 07)
             };
 
             //Filter data
