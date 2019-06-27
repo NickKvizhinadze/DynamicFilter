@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using DynamicFilter.Models;
 using DynamicFilter.Extentions;
+using DynamicFilter.Enums;
 
 namespace DynamicFilter
 {
@@ -43,7 +44,7 @@ namespace DynamicFilter
             Expression right = Expression.Constant(constant, typeof(string));
 
             var body = Expression.Call(left, method, right);
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -56,7 +57,7 @@ namespace DynamicFilter
             Expression right = Expression.Constant(filter.Value, filter.ValueType);
 
             var body = Expression.Call(right, method, left);
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -77,7 +78,7 @@ namespace DynamicFilter
 
             Expression e2 = Expression.Call(right, method, left);
             var body = Expression.AndAlso(e1, e2);
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -86,7 +87,7 @@ namespace DynamicFilter
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType), filter.PropertyType);
             var body = Expression.Equal(left, right);
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -101,7 +102,7 @@ namespace DynamicFilter
             Expression e2 = Expression.Equal(left, right);
 
             var body = Expression.AndAlso(e1, e2);
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -127,7 +128,7 @@ namespace DynamicFilter
             else
                 body = Expression.GreaterThan(left, right);
 
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
 
             return this;
         }
@@ -154,7 +155,7 @@ namespace DynamicFilter
             else
                 body = Expression.GreaterThanOrEqual(left, right);
 
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -180,7 +181,7 @@ namespace DynamicFilter
             else
                 body = Expression.LessThan(left, right);
 
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
@@ -207,16 +208,16 @@ namespace DynamicFilter
             else
                 body = Expression.LessThanOrEqual(left, right);
 
-            _tempBodies.Add(new FilterExpression(null, body));
+            _tempBodies.Add(new FilterExpression(body));
             return this;
         }
 
-        internal QueryGenerator<T> OrElse()
+        internal QueryGenerator<T> Condition(ConditionalOperators conditionOperator)
         {
             if (_tempBodies.Any())
             {
                 var expression = _tempBodies.Last();
-                expression.Method = "OrElse";
+                expression.Method = conditionOperator;
             }
 
             return this;
@@ -271,16 +272,16 @@ namespace DynamicFilter
             {
                 foreach (var body in _tempBodies)
                 {
-                    if (body == null)
+                    if (result == null)
                         result = body.Expression;
                     else
                     {
                         switch (body.Method)
                         {
-                            case "OrElse":
+                            case ConditionalOperators.Or:
                                 result = Expression.OrElse(result, body.Expression);
                                 break;
-                            default:
+                            case ConditionalOperators.And:
                                 result = Expression.AndAlso(result, body.Expression);
                                 break;
                         }

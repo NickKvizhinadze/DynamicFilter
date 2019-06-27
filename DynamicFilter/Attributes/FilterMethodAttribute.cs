@@ -11,7 +11,15 @@ namespace DynamicFilter.Attributes
             MethodName = methodName.ToString();
             PropertyName = propertyName;
         }
+
+        public FilterMethodAttribute(FilterMethods methodName, ConditionalOperators conditionalOperator, string propertyName = null)
+            : this(methodName, propertyName)
+        {
+            ConditionalOperator = conditionalOperator;
+        }
+
         public string MethodName { get; set; }
         public string PropertyName { get; set; }
+        public ConditionalOperators? ConditionalOperator { get; set; }
     }
 }

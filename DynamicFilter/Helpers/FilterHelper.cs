@@ -24,14 +24,18 @@ namespace DynamicFilter.Helpers
 
             foreach (var filter in filters)
             {
+                var index = 0;
                 foreach (var item in filter)
                 {
                     queryGenerator = (QueryGenerator<TList>)
                                     typeof(QueryGenerator<TList>)
                                     .GetMethod(item.MethodName, BindingFlags.NonPublic | BindingFlags.Instance)
                                     .Invoke(queryGenerator, new[] { item });
-
-                    queryGenerator.OrElse();
+                    if (filter.Count() != 1 && index > 0 && item.ConditionalOperator.HasValue)
+                    {
+                        queryGenerator.Condition(item.ConditionalOperator.Value);
+                    }
+                    index++;
                 }
 
                 queryGenerator.AddFilter();

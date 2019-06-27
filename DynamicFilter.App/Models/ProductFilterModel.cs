@@ -18,13 +18,13 @@ namespace DynamicFilter.App.Models
         [FilterMethod(FilterMethods.GreaterThanOrEqual, nameof(Product.ReceiveDate))]
         public DateTime? ReceiveDateFrom { get; set; }
 
-        [FilterMethod(FilterMethods.LessThanOrEqual, nameof(Product.ReceiveDate))]
+        [FilterMethod(FilterMethods.LessThanOrEqual, ConditionalOperators.And, nameof(Product.ReceiveDate))]
         public DateTime? ReceiveDateTo { get; set; }
 
         [FilterMethod(FilterMethods.Equal, nameof(Product.CategoryId))]
         public int CategoryId { get; set; }
 
-        [FilterMethod(FilterMethods.Contains, nameof(Product.CategoryId))]
+        [FilterMethod(FilterMethods.Contains, ConditionalOperators.Or, nameof(Product.CategoryId))]
         public List<int> Categories { get; set; }
 
 
@@ -40,10 +40,10 @@ namespace DynamicFilter.App.Models
                 .Property(f => f.CategoryId)
                 .AddValidation(x => (int)x > 0);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.Categories)
-                .AddValidation(x => CategoryId == 0);
+            //ValidationBuilder
+            //    .For<ProductFilterModel>()
+            //    .Property(f => f.Categories)
+            //    .AddValidation(x => CategoryId == 0);
 
             var test = _predicates;
         }

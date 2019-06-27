@@ -15,8 +15,8 @@ namespace DynamicFilter.App
             //Product filter model
             var productFilter = new ProductFilterModel
             {
-                //Captions = new List<string>() { "Apple", "Pear" },
-                //Price = 3,
+                Captions = new List<string>() { "Apple", "Pear" },
+                Price = 3,
                 ReceiveDateFrom = new DateTime(2019, 05, 07),
                 ReceiveDateTo = new DateTime(2019, 07, 07),
                 CategoryId = 1,

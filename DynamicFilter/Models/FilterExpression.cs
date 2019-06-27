@@ -1,16 +1,17 @@
-﻿using System.Linq.Expressions;
+﻿using DynamicFilter.Enums;
+using System.Linq.Expressions;
 
 namespace DynamicFilter.Models
 {
     public class FilterExpression
     {
-        public FilterExpression(string method, Expression expression)
+        public FilterExpression(Expression expression, ConditionalOperators? method = null)
         {
             Method = method;
             Expression = expression;
         }
 
-        public string Method { get; set; }
+        public ConditionalOperators? Method { get; set; }
         public Expression Expression { get; set; }
     }
 }

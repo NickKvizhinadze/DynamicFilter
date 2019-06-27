@@ -1,4 +1,5 @@
-﻿using DynamicFilter.Extentions;
+﻿using DynamicFilter.Enums;
+using DynamicFilter.Extentions;
 using System;
 
 namespace DynamicFilter.Models
@@ -25,6 +26,7 @@ namespace DynamicFilter.Models
         internal Type ValueType { get; set; }
         internal object Value { get; set; }
         internal string MethodName { get; set; }
+        public ConditionalOperators? ConditionalOperator { get; set; }
         #endregion
 
         #region Methods
