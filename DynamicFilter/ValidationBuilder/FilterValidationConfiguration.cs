@@ -14,7 +14,7 @@ namespace DynamicFilter.ValidationBuilder
             _predicates = predicates;
         }
 
-        public FilterPropertyConfiguration Property<T>(Expression<Func<TClass, T?>> propertyExpression) where T : struct
+        public FilterPropertyConfiguration Property<T>(Expression<Func<TClass, T>> propertyExpression)
         {
             var body = propertyExpression.Body as MemberExpression;
             var property = body.Member as PropertyInfo;

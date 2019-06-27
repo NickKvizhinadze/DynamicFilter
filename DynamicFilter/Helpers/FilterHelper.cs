@@ -6,11 +6,11 @@ namespace DynamicFilter.Helpers
 {
     public static class FilterHelper
     {
-        public static IQueryable<TList> Filter<TFilter, TList>(TFilter filter, IQueryable<TList> list) where TFilter: BaseFilter
+        public static IQueryable<TList> Filter<TFilter, TList>(TFilter filterModel, IQueryable<TList> list) where TFilter : BaseFilter
         {
             //Filter Model Generator
             var filterGenerator = new FilterModelGenerator<TFilter>();
-            filterGenerator.GenerateFilterModel(filter);
+            filterGenerator.GenerateFilterModel(filterModel);
 
             //Query Generator
 
@@ -19,13 +19,20 @@ namespace DynamicFilter.Helpers
             //Filter Parameter
             if (filterGenerator.Filters == null)
                 return list;
-                        
-            foreach (var item in filterGenerator.Filters)
+
+            var filters = filterGenerator.Filters.GroupBy(f => f.PropertyName);
+
+            foreach (var filter in filters)
             {
-                queryGenerator = (QueryGenerator<TList>)
-                                typeof(QueryGenerator<TList>)
-                                .GetMethod(item.MethodName, BindingFlags.NonPublic | BindingFlags.Instance)
-                                .Invoke(queryGenerator, new[] { item });
+                foreach (var item in filter)
+                {
+                    queryGenerator = (QueryGenerator<TList>)
+                                    typeof(QueryGenerator<TList>)
+                                    .GetMethod(item.MethodName, BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .Invoke(queryGenerator, new[] { item });
+
+                    queryGenerator.OrElse();
+                }
 
                 queryGenerator.AddFilter();
             }

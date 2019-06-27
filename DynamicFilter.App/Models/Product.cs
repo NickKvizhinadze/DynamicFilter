@@ -10,5 +10,7 @@ namespace DynamicFilter.App.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public DateTime? ReceiveDate { get; set; }
+
+        public int CategoryId { get; set; }
     }
 }

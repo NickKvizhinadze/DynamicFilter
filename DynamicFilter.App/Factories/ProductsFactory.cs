@@ -18,7 +18,8 @@ namespace DynamicFilter.App.Factories
                         Description = "Green Apple",
                         Price = 3,
                         Quantity = 15,
-                        ReceiveDate = new DateTime(2019, 05, 06)
+                        ReceiveDate = new DateTime(2019, 05, 06),
+                        CategoryId = 1
                     },
                     new Product {
                         Id = 2,
@@ -26,7 +27,8 @@ namespace DynamicFilter.App.Factories
                         Description = "Golden Pear",
                         Price = 2.3M,
                         Quantity = 25,
-                        ReceiveDate = new DateTime(2019, 05, 15)
+                        ReceiveDate = new DateTime(2019, 05, 15),
+                        CategoryId = 2
                     },
                     new Product {
                         Id = 3,
@@ -34,7 +36,8 @@ namespace DynamicFilter.App.Factories
                         Description = "Georgian Orange",
                         Price = 1.25M,
                         Quantity = 18,
-                        ReceiveDate = new DateTime(2019, 05, 15)
+                        ReceiveDate = new DateTime(2019, 05, 15),
+                        CategoryId = 3
                     },
                     new Product {
                         Id = 4,
@@ -42,7 +45,8 @@ namespace DynamicFilter.App.Factories
                         Description = "Foreign Tangerine",
                         Price = 1.8M,
                         Quantity = 5,
-                        ReceiveDate = new DateTime(2019, 05, 21)
+                        ReceiveDate = new DateTime(2019, 05, 21),
+                        CategoryId = 4
                     },
                     new Product {
                         Id = 1,
@@ -50,7 +54,8 @@ namespace DynamicFilter.App.Factories
                         Description = "Winter Apple",
                         Price = 3,
                         Quantity = 10,
-                        ReceiveDate = new DateTime(2019, 05, 30)
+                        ReceiveDate = new DateTime(2019, 05, 30),
+                        CategoryId = 5
                     },
                 };
             }

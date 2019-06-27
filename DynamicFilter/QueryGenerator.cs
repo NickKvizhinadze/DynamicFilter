@@ -14,6 +14,8 @@ namespace DynamicFilter
         private readonly ParameterExpression _parameter;
         private Expression _body;
         private Expression _tempBody;
+        private List<Expression> _tempBodies;
+        private Expression _tempLeft;
         private MethodCallExpression _whereCall;
 
         #endregion
@@ -193,10 +195,30 @@ namespace DynamicFilter
             return this;
         }
 
+        internal QueryGenerator<T> OrElse()
+        {
+            if (_tempBodies == null)
+                _tempBodies = new List<Expression>();
+            _tempBodies.Add(_tempBody);
+            return this;
+        }
+
         #endregion
 
         internal QueryGenerator<T> AddFilter()
         {
+            if (_tempBodies != null && _tempBodies.Any())
+            {
+                _tempBody = null;
+                foreach (var body in _tempBodies)
+                {
+                    if (_tempBody == null)
+                        _tempBody = body;
+                    else
+                        _tempBody = Expression.OrElse(_tempBody, body);
+                }
+            }
+
             if (_tempBody == null)
                 throw new Exception("Body is null");
 
@@ -204,6 +226,9 @@ namespace DynamicFilter
                 _body = _tempBody;
             else
                 _body = Expression.AndAlso(_body, _tempBody);
+
+            _tempBody = null;
+            _tempBodies = null;
             return this;
         }
 
@@ -216,6 +241,7 @@ namespace DynamicFilter
                data.Expression,
                Expression.Lambda<Func<T, bool>>(_body, new ParameterExpression[] { _parameter })
                );
+            _body = null;
             return data.Provider.CreateQuery<T>(_whereCall);
         }
 

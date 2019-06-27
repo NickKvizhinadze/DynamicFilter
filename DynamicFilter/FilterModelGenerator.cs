@@ -29,32 +29,32 @@ namespace DynamicFilter
                 var propertyAttributes = prop.GetCustomAttributes(typeof(FilterMethodAttribute), false);
                 if (propertyAttributes?.Any() != true)
                     continue;
-
-                var methodAttribute = propertyAttributes.First() as FilterMethodAttribute;
-                var filter = new FilterModel();
-
-                filter.MethodName = methodAttribute.MethodName;
-                filter.PropertyName = methodAttribute.PropertyName ?? prop.Name;
-                filter.Value = prop.GetValue(model);
-                filter.PropertyType = _forType.GetProperty(filter.PropertyName).PropertyType;
-                filter.ValueType = prop.PropertyType;
-
-                if (!filter.IsValid())
-                    continue;
-
-                //Custom Validations
-                if (validationPredicates.TryGetValue(filter.PropertyName, out Func<object, bool> predicate))
+                foreach (FilterMethodAttribute methodAttribute in propertyAttributes)
                 {
-                    var shouldExecute = predicate.Invoke(filter.Value);
-                    if (!shouldExecute)
-                        continue;
-                }
-                                
-                if (Filters == null)
-                    Filters = new List<FilterModel>();
-                Filters.Add(filter);
-            }
+                    var filter = new FilterModel();
 
+                    filter.MethodName = methodAttribute.MethodName;
+                    filter.PropertyName = methodAttribute.PropertyName ?? prop.Name;
+                    filter.Value = prop.GetValue(model);
+                    filter.PropertyType = _forType.GetProperty(filter.PropertyName).PropertyType;
+                    filter.ValueType = prop.PropertyType;
+
+                    if (!filter.IsValid())
+                        continue;
+
+                    //Custom Validations
+                    if (validationPredicates.TryGetValue(prop.Name, out Func<object, bool> predicate))
+                    {
+                        var shouldExecute = predicate.Invoke(filter.Value);
+                        if (!shouldExecute)
+                            continue;
+                    }
+
+                    if (Filters == null)
+                        Filters = new List<FilterModel>();
+                    Filters.Add(filter);
+                }
+            }
         }
     }
 }
