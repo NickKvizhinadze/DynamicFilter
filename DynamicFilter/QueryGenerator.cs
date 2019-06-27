@@ -13,9 +13,8 @@ namespace DynamicFilter
         #region Fields
         private readonly ParameterExpression _parameter;
         private Expression _body;
-        private Expression _tempBody;
-        private List<Expression> _tempBodies;
-        private Expression _tempLeft;
+        //private Expression body;
+        private List<FilterExpression> _tempBodies = new List<FilterExpression>();
         private MethodCallExpression _whereCall;
 
         #endregion
@@ -43,7 +42,8 @@ namespace DynamicFilter
             var constant = matchCase ? filter.Value : filter.Value.ToString().ToLower();
             Expression right = Expression.Constant(constant, typeof(string));
 
-            _tempBody = Expression.Call(left, method, right);
+            var body = Expression.Call(left, method, right);
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -55,7 +55,8 @@ namespace DynamicFilter
 
             Expression right = Expression.Constant(filter.Value, filter.ValueType);
 
-            _tempBody = Expression.Call(right, method, left);
+            var body = Expression.Call(right, method, left);
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -75,7 +76,8 @@ namespace DynamicFilter
             Expression right = Expression.Constant(filter.Value, filter.ValueType);
 
             Expression e2 = Expression.Call(right, method, left);
-            _tempBody = Expression.AndAlso(e1, e2);
+            var body = Expression.AndAlso(e1, e2);
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -83,7 +85,8 @@ namespace DynamicFilter
         {
             Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType), filter.PropertyType);
-            _tempBody = Expression.Equal(left, right);
+            var body = Expression.Equal(left, right);
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -97,7 +100,8 @@ namespace DynamicFilter
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, propertyType), filter.PropertyType);
             Expression e2 = Expression.Equal(left, right);
 
-            _tempBody = Expression.AndAlso(e1, e2);
+            var body = Expression.AndAlso(e1, e2);
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -114,13 +118,16 @@ namespace DynamicFilter
 
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
 
+            Expression body;
             if (e1 != null)
             {
                 Expression e2 = Expression.GreaterThan(left, right);
-                _tempBody = Expression.AndAlso(e1, e2);
+                body = Expression.AndAlso(e1, e2);
             }
             else
-                _tempBody = Expression.GreaterThan(left, right);
+                body = Expression.GreaterThan(left, right);
+
+            _tempBodies.Add(new FilterExpression(null, body));
 
             return this;
         }
@@ -138,13 +145,16 @@ namespace DynamicFilter
 
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
 
+            Expression body;
             if (e1 != null)
             {
                 Expression e2 = Expression.GreaterThanOrEqual(left, right);
-                _tempBody = Expression.AndAlso(e1, e2);
+                body = Expression.AndAlso(e1, e2);
             }
             else
-                _tempBody = Expression.GreaterThanOrEqual(left, right);
+                body = Expression.GreaterThanOrEqual(left, right);
+
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -161,13 +171,16 @@ namespace DynamicFilter
 
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
 
+            Expression body;
             if (e1 != null)
             {
                 Expression e2 = Expression.LessThan(left, right);
-                _tempBody = Expression.AndAlso(e1, e2);
+                body = Expression.AndAlso(e1, e2);
             }
             else
-                _tempBody = Expression.LessThan(left, right);
+                body = Expression.LessThan(left, right);
+
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
@@ -184,22 +197,28 @@ namespace DynamicFilter
             }
 
             Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+
+            Expression body;
             if (e1 != null)
             {
                 Expression e2 = Expression.LessThanOrEqual(left, right);
-                _tempBody = Expression.AndAlso(e1, e2);
+                body = Expression.AndAlso(e1, e2);
             }
             else
-                _tempBody = Expression.LessThanOrEqual(left, right);
+                body = Expression.LessThanOrEqual(left, right);
 
+            _tempBodies.Add(new FilterExpression(null, body));
             return this;
         }
 
         internal QueryGenerator<T> OrElse()
         {
-            if (_tempBodies == null)
-                _tempBodies = new List<Expression>();
-            _tempBodies.Add(_tempBody);
+            if (_tempBodies.Any())
+            {
+                var expression = _tempBodies.Last();
+                expression.Method = "OrElse";
+            }
+
             return this;
         }
 
@@ -207,28 +226,17 @@ namespace DynamicFilter
 
         internal QueryGenerator<T> AddFilter()
         {
-            if (_tempBodies != null && _tempBodies.Any())
-            {
-                _tempBody = null;
-                foreach (var body in _tempBodies)
-                {
-                    if (_tempBody == null)
-                        _tempBody = body;
-                    else
-                        _tempBody = Expression.OrElse(_tempBody, body);
-                }
-            }
+            Expression body = GenerateBody();
 
-            if (_tempBody == null)
+            if (body == null)
                 throw new Exception("Body is null");
 
             if (_body == null)
-                _body = _tempBody;
+                _body = body;
             else
-                _body = Expression.AndAlso(_body, _tempBody);
+                _body = Expression.AndAlso(_body, body);
 
-            _tempBody = null;
-            _tempBodies = null;
+            _tempBodies = new List<FilterExpression>();
             return this;
         }
 
@@ -255,6 +263,34 @@ namespace DynamicFilter
             Expression e1 = Expression.NotEqual(left, right1);
             return e1;
         }
+
+        private Expression GenerateBody()
+        {
+            Expression result = null;
+            if (_tempBodies != null && _tempBodies.Any())
+            {
+                foreach (var body in _tempBodies)
+                {
+                    if (body == null)
+                        result = body.Expression;
+                    else
+                    {
+                        switch (body.Method)
+                        {
+                            case "OrElse":
+                                result = Expression.OrElse(result, body.Expression);
+                                break;
+                            default:
+                                result = Expression.AndAlso(result, body.Expression);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }
