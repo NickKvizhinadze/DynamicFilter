@@ -20,7 +20,11 @@ namespace DynamicFilter.App
                 ReceiveDateFrom = new DateTime(2019, 05, 07),
                 ReceiveDateTo = new DateTime(2019, 07, 07),
                 CategoryId = 1,
-                Categories = new List<int> { 3, 4 }
+                Categories = new List<int> { 3, 4 },
+                CardTariffIds = new List<int> { 1, 3 },
+                CreditCategoryIds = new List<int> { 4, 3 },
+                AccountTariffIds = new List<int> { 2, 4, 7 },
+                IsAllTariff = true
             };
 
             //Filter data

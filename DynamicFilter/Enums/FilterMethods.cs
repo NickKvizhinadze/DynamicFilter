@@ -10,6 +10,8 @@
         GreaterThan,
         GreaterThanOrEqual,
         LessThan,
-        LessThanOrEqual
+        LessThanOrEqual,
+        IsNotNull,
+        IsNull
     }
 }

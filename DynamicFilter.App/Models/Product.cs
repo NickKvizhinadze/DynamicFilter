@@ -12,5 +12,8 @@ namespace DynamicFilter.App.Models
         public DateTime? ReceiveDate { get; set; }
 
         public int CategoryId { get; set; }
+        public int? CardTariffId { get; set; }
+        public int? CreditCategoryId { get; set; }
+        public int? AccountTariffId { get; set; }
     }
 }

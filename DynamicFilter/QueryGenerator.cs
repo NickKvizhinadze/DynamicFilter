@@ -212,6 +212,21 @@ namespace DynamicFilter
             return this;
         }
 
+        internal QueryGenerator<T> IsNotNull(FilterModel filter)
+        {
+            Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
+            Expression body = HasValue(filter, left);
+            _tempBodies.Add(new FilterExpression(body));
+            return this;
+        }
+        internal QueryGenerator<T> IsNull(FilterModel filter)
+        {
+            Expression left = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
+            Expression body = HasNotValue(filter, left);
+            _tempBodies.Add(new FilterExpression(body));
+            return this;
+        }
+
         internal QueryGenerator<T> Condition(ConditionalOperators conditionOperator)
         {
             if (_tempBodies.Any())
@@ -222,6 +237,7 @@ namespace DynamicFilter
 
             return this;
         }
+
 
         #endregion
 
@@ -260,9 +276,13 @@ namespace DynamicFilter
 
         private Expression HasValue(FilterModel filter, Expression left)
         {
-            Expression right1 = Expression.Constant(null, filter.PropertyType);
-            Expression e1 = Expression.NotEqual(left, right1);
-            return e1;
+            Expression right = Expression.Constant(null, filter.PropertyType);
+            return Expression.NotEqual(left, right);
+        }
+        private Expression HasNotValue(FilterModel filter, Expression left)
+        {
+            Expression right = Expression.Constant(null, filter.PropertyType);
+            return Expression.Equal(left, right);
         }
 
         private Expression GenerateBody()

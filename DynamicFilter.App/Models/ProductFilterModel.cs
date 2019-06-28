@@ -28,6 +28,21 @@ namespace DynamicFilter.App.Models
         public List<int> Categories { get; set; }
 
 
+        [FilterMethod(FilterMethods.HasValueAndContains, nameof(Product.CardTariffId))]
+        public List<int> CardTariffIds { get; set; }
+
+        [FilterMethod(FilterMethods.HasValueAndContains, nameof(Product.CreditCategoryId))]
+        public List<int> CreditCategoryIds { get; set; }
+
+        [FilterMethod(FilterMethods.HasValueAndContains, nameof(Product.AccountTariffId))]
+        public List<int> AccountTariffIds { get; set; }
+
+        [FilterMethod(FilterMethods.IsNotNull, nameof(Product.CardTariffId))]
+        [FilterMethod(FilterMethods.IsNotNull, nameof(Product.CreditCategoryId))]
+        [FilterMethod(FilterMethods.IsNotNull, nameof(Product.AccountTariffId))]
+        public bool? IsAllTariff { get; set; }
+
+
         public override void Configure()
         {
             ValidationBuilder
@@ -40,10 +55,30 @@ namespace DynamicFilter.App.Models
                 .Property(f => f.CategoryId)
                 .AddValidation(x => (int)x > 0);
 
-            //ValidationBuilder
-            //    .For<ProductFilterModel>()
-            //    .Property(f => f.Categories)
-            //    .AddValidation(x => CategoryId == 0);
+            ValidationBuilder
+                .For<ProductFilterModel>()
+                .Property(f => f.Categories)
+                .AddValidation(x => CategoryId == 0);
+
+            ValidationBuilder
+                .For<ProductFilterModel>()
+                .Property(f => f.CardTariffIds)
+                .AddValidation(x => IsAllTariff != true);
+
+            ValidationBuilder
+                .For<ProductFilterModel>()
+                .Property(f => f.CreditCategoryIds)
+                .AddValidation(x => IsAllTariff != true);
+
+            ValidationBuilder
+                .For<ProductFilterModel>()
+                .Property(f => f.AccountTariffIds)
+                .AddValidation(x => IsAllTariff != true);
+
+            ValidationBuilder
+                .For<ProductFilterModel>()
+                .Property(f => f.IsAllTariff)
+                .AddValidation(x => IsAllTariff == true);
 
             var test = _predicates;
         }
