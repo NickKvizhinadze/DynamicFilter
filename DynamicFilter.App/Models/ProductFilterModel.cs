@@ -42,7 +42,6 @@ namespace DynamicFilter.App.Models
         [FilterMethod(FilterMethods.IsNotNull, nameof(Product.AccountTariffId))]
         public bool? IsAllTariff { get; set; }
 
-
         public override void Configure()
         {
             ValidationBuilder
@@ -79,8 +78,6 @@ namespace DynamicFilter.App.Models
                 .For<ProductFilterModel>()
                 .Property(f => f.IsAllTariff)
                 .AddValidation(x => IsAllTariff == true);
-
-            var test = _predicates;
         }
     }
 }

@@ -6,6 +6,14 @@ namespace DynamicFilter.Helpers
 {
     public static class FilterHelper
     {
+        /// <summary>
+        /// Returns IQueryable filtered Data.
+        /// </summary>
+        /// <typeparam name="TFilter">Filter model type</typeparam>
+        /// <typeparam name="TList">Data model type</typeparam>
+        /// <param name="filterModel">Filter data</param>
+        /// <param name="list">Data which should be filtered</param>
+        /// <returns>Filtered data</returns>
         public static IQueryable<TList> Filter<TFilter, TList>(TFilter filterModel, IQueryable<TList> list) where TFilter : BaseFilter
         {
             //Filter Model Generator

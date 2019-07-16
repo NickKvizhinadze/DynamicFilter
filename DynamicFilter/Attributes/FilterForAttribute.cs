@@ -2,6 +2,9 @@
 
 namespace DynamicFilter.Attributes
 {
+    /// <summary>
+    /// Attribute Class for setting filtering data type
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class FilterForAttribute: Attribute
     {
@@ -9,6 +12,10 @@ namespace DynamicFilter.Attributes
         {
             ForType = type;
         }
+
+        /// <summary>
+        /// Filtering data type
+        /// </summary>
         public Type ForType { get; set; }
     }
 }
