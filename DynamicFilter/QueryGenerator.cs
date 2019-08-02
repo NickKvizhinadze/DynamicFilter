@@ -235,7 +235,7 @@ namespace DynamicFilter
             Expression body = GenerateBody();
 
             if (body == null)
-                throw new Exception("Body is null");
+                return this;
 
             if (_body == null)
                 _body = body;

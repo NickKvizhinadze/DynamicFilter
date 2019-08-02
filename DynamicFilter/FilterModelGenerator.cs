@@ -39,6 +39,7 @@ namespace DynamicFilter
                     filter.PropertyType = _forType.GetProperty(filter.PropertyName).PropertyType;
                     filter.ValueType = prop.PropertyType;
                     filter.ConditionalOperator = methodAttribute.ConditionalOperator;
+                    filter.FilterPropertyName = prop.Name;
 
                     if (!filter.IsValid())
                         continue;
