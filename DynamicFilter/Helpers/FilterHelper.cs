@@ -29,7 +29,8 @@ namespace DynamicFilter.Helpers
                 {
                     queryGenerator = (QueryGenerator<TList>)
                                     typeof(QueryGenerator<TList>)
-                                    .GetMethod(item.MethodName, BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .FirstOrDefault(x => x.Name == item.MethodName && x.IsAssembly)
                                     .Invoke(queryGenerator, new[] { item });
                     if (filter.Count() != 1 && index > 0 && item.ConditionalOperator.HasValue)
                     {

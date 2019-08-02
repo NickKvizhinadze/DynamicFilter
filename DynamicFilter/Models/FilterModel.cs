@@ -26,7 +26,7 @@ namespace DynamicFilter.Models
         internal Type ValueType { get; set; }
         internal object Value { get; set; }
         internal string MethodName { get; set; }
-        public ConditionalOperators? ConditionalOperator { get; set; }
+        internal ConditionalOperators? ConditionalOperator { get; set; }
         #endregion
 
         #region Methods
@@ -39,7 +39,7 @@ namespace DynamicFilter.Models
             if (PropertyType == null)
                 return false;
             
-            if (Value == null || Value.IsNotNullOrEmptyArray())
+            if (Value == null || Value.IsNullOrEmptyArray())
                 return false;
 
             if (string.IsNullOrEmpty(MethodName))

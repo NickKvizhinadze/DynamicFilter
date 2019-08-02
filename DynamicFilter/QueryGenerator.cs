@@ -31,20 +31,9 @@ namespace DynamicFilter
         #region Methods
 
         #region Filter Methods
-        internal QueryGenerator<T> StringContains(FilterModel filter, bool matchCase)
+        internal QueryGenerator<T> StringContains(FilterModel filter)
         {
-            if (filter.PropertyType != typeof(string))
-                throw new TypeLoadException("Incorrect type");
-
-            Expression propertyExpression = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
-            Expression left = !matchCase ? Expression.Call(propertyExpression, "ToLower", null) : propertyExpression;
-
-            MethodInfo method = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
-            var constant = matchCase ? filter.Value : filter.Value.ToString().ToLower();
-            Expression right = Expression.Constant(constant, typeof(string));
-
-            var body = Expression.Call(left, method, right);
-            _tempBodies.Add(new FilterExpression(body));
+            StringContains(filter, false);
             return this;
         }
 
@@ -279,6 +268,7 @@ namespace DynamicFilter
             Expression right = Expression.Constant(null, filter.PropertyType);
             return Expression.NotEqual(left, right);
         }
+
         private Expression HasNotValue(FilterModel filter, Expression left)
         {
             Expression right = Expression.Constant(null, filter.PropertyType);
@@ -310,6 +300,23 @@ namespace DynamicFilter
             }
 
             return result;
+        }
+
+        private QueryGenerator<T> StringContains(FilterModel filter, bool matchCase)
+        {
+            if (filter.PropertyType != typeof(string))
+                throw new TypeLoadException("Incorrect type");
+
+            Expression propertyExpression = Expression.Property(_parameter, typeof(T).GetProperty(filter.PropertyName));
+            Expression left = !matchCase ? Expression.Call(propertyExpression, "ToLower", null) : propertyExpression;
+
+            MethodInfo method = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
+            var constant = matchCase ? filter.Value : filter.Value.ToString().ToLower();
+            Expression right = Expression.Constant(constant, typeof(string));
+
+            var body = Expression.Call(left, method, right);
+            _tempBodies.Add(new FilterExpression(body));
+            return this;
         }
 
         #endregion

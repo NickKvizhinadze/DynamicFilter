@@ -4,9 +4,9 @@ namespace DynamicFilter.Extentions
 {
     internal static class ObjectExtentions
     {
-        internal static bool IsNotNullOrEmptyArray(this object source)
+        internal static bool IsNullOrEmptyArray(this object source)
         {
-            if (source.GetType().GetInterface("IEnumerable") != null)
+            if (source.GetType() != typeof(string) && source.GetType().GetInterface("IEnumerable") != null)
             {
                 var list = source as IList;
                 return list == null || list.Count == 0;
