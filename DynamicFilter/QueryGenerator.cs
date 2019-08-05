@@ -106,7 +106,7 @@ namespace DynamicFilter
                 left = Expression.Convert(left, filter.PropertyType);
             }
 
-            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+            Expression right = GetConstant(filter);
 
             Expression body;
             if (e1 != null)
@@ -133,7 +133,7 @@ namespace DynamicFilter
                 left = Expression.Convert(left, filter.PropertyType);
             }
 
-            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+            Expression right = GetConstant(filter);
 
             Expression body;
             if (e1 != null)
@@ -159,7 +159,7 @@ namespace DynamicFilter
                 left = Expression.Convert(left, filter.PropertyType);
             }
 
-            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+            Expression right = GetConstant(filter);
 
             Expression body;
             if (e1 != null)
@@ -186,7 +186,7 @@ namespace DynamicFilter
                 left = Expression.Convert(left, filter.PropertyType);
             }
 
-            Expression right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+            Expression right = GetConstant(filter);
 
             Expression body;
             if (e1 != null)
@@ -258,7 +258,7 @@ namespace DynamicFilter
             _body = null;
             return data.Provider.CreateQuery<T>(_whereCall);
         }
-
+        
         #endregion
 
         #region Private Methods
@@ -317,6 +317,20 @@ namespace DynamicFilter
             var body = Expression.Call(left, method, right);
             _tempBodies.Add(new FilterExpression(body));
             return this;
+        }
+
+        private Expression GetConstant(FilterModel filter)
+        {
+            Expression right;
+            if (filter.PropertyType == typeof(DateTime))
+            {
+                var value = (DateTime)filter.Value;
+                Expression<Func<DateTime>> dateConstant = () => value;
+                right = dateConstant.Body;
+            }
+            else
+                right = Expression.Constant(Convert.ChangeType(filter.Value, filter.PropertyType));
+            return right;
         }
 
         #endregion
