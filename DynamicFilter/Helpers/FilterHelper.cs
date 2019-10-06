@@ -26,7 +26,7 @@ namespace DynamicFilter.Helpers
             var queryGenerator = new QueryGenerator<TList>();
 
             //Filter Parameter
-            if (filterGenerator.Filters == null)
+            if (!filterGenerator.Filters.Any())
                 return list;
 
             var filters = filterGenerator.Filters.GroupBy(f => f.PropertyName);
