@@ -14,7 +14,7 @@ namespace DynamicFilter.ValidationBuilder
             var body = propertyExpr.Body as MemberExpression;
             var property = body.Member as PropertyInfo;
 
-            return new FilterPropertyConfiguration<TFilterModel>(property.Name, filterModel._predicates);
+            return new FilterPropertyConfiguration<TFilterModel>(property.Name, filterModel.Predicates);
         }
     }
 

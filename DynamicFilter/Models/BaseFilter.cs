@@ -8,18 +8,13 @@ namespace DynamicFilter.Models
     /// </summary>
     public abstract class BaseFilter
     {
-        internal Dictionary<string, Func<object, bool>> _predicates = new Dictionary<string, Func<object, bool>>();
+        internal Dictionary<string, Func<object, bool>> Predicates { get; } = new Dictionary<string, Func<object, bool>>();
 
         /// <summary>
         /// Configuration method for validation
         /// </summary>
         public virtual void Configure()
         {
-        }
-
-        internal Dictionary<string, Func<object, bool>> GetPredicates()
-        {
-            return _predicates;
         }
     }
 }

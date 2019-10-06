@@ -23,7 +23,7 @@ namespace DynamicFilter
             _forType = filterForAttribute.ForType;
 
             model.Configure();
-            var validationPredicates = model.GetPredicates();
+            var validationPredicates = model.Predicates;
 
             var props = model.GetType().GetProperties();
             foreach (var prop in props)
