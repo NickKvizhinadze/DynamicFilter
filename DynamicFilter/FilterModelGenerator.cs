@@ -9,7 +9,9 @@ namespace DynamicFilter
     internal class FilterModelGenerator<T> where T : BaseFilter
     {
         private Type _forType;
-        internal List<FilterModel> Filters { get; private set; }
+
+        private List<FilterModel> _filters;
+        internal List<FilterModel> Filters { get => _filters ?? (_filters = new List<FilterModel>()); }
 
         internal void GenerateFilterModel(T model)
         {
@@ -52,8 +54,6 @@ namespace DynamicFilter
                             continue;
                     }
 
-                    if (Filters == null)
-                        Filters = new List<FilterModel>();
                     Filters.Add(filter);
                 }
             }
