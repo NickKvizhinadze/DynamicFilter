@@ -33,6 +33,14 @@ namespace DynamicFilter
                     continue;
                 foreach (FilterMethodAttribute methodAttribute in propertyAttributes)
                 {
+                    //Custom Validations
+                    if (validationPredicates.TryGetValue(prop.Name, out Func<object, bool> predicate))
+                    {
+                        var shouldExecute = predicate.Invoke(model);
+                        if (!shouldExecute)
+                            continue;
+                    }
+
                     var filter = new FilterModel();
 
                     filter.MethodName = methodAttribute.MethodName;
@@ -45,14 +53,6 @@ namespace DynamicFilter
 
                     if (!filter.IsValid())
                         continue;
-
-                    //Custom Validations
-                    if (validationPredicates.TryGetValue(prop.Name, out Func<object, bool> predicate))
-                    {
-                        var shouldExecute = predicate.Invoke(model);
-                        if (!shouldExecute)
-                            continue;
-                    }
 
                     Filters.Add(filter);
                 }
