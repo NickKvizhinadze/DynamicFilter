@@ -6,7 +6,7 @@ namespace DynamicFilter.Attributes
     /// Attribute Class for setting filtering data type
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class FilterForAttribute: Attribute
+    public class FilterForAttribute : Attribute
     {
         public FilterForAttribute(Type type)
         {

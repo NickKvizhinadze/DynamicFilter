@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DynamicFilter.Enums;
 using DynamicFilter.Models;
 using DynamicFilter.Attributes;
+using DynamicFilter.ValidationBuilder;
 
 namespace DynamicFilter.App.Models
 {
@@ -44,40 +45,26 @@ namespace DynamicFilter.App.Models
 
         public override void Configure()
         {
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.Price)
-                .AddValidation(x => x != null && (decimal)x > 0);
+            this.FilterBy(f => f.Price)
+                .If(f => f.Price > 0);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.CategoryId)
-                .AddValidation(x => (int)x > 0);
+            this.FilterBy(f => f.CategoryId)
+                .If(f => f.CategoryId > 0);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.Categories)
-                .AddValidation(x => CategoryId == 0);
+            this.FilterBy(f => f.Categories)
+                .If(f => f.CategoryId == 0);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.CardTariffIds)
-                .AddValidation(x => IsAllTariff != true);
+            this.FilterBy(f => f.CardTariffIds)
+                .If(f => f.IsAllTariff != true);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.CreditCategoryIds)
-                .AddValidation(x => IsAllTariff != true);
+            this.FilterBy(f => f.CreditCategoryIds)
+                .If(f => f.IsAllTariff != true);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.AccountTariffIds)
-                .AddValidation(x => IsAllTariff != true);
+            this.FilterBy(f => f.AccountTariffIds)
+                .If(f => f.IsAllTariff != true);
 
-            ValidationBuilder
-                .For<ProductFilterModel>()
-                .Property(f => f.IsAllTariff)
-                .AddValidation(x => IsAllTariff == true);
+            this.FilterBy(f => f.IsAllTariff)
+                .If(f => f.IsAllTariff != true);
         }
     }
 }

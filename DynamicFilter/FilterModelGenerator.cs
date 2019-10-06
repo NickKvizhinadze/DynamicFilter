@@ -49,7 +49,7 @@ namespace DynamicFilter
                     //Custom Validations
                     if (validationPredicates.TryGetValue(prop.Name, out Func<object, bool> predicate))
                     {
-                        var shouldExecute = predicate.Invoke(filter.Value);
+                        var shouldExecute = predicate.Invoke(model);
                         if (!shouldExecute)
                             continue;
                     }

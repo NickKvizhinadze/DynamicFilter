@@ -1,5 +1,4 @@
-﻿using DynamicFilter.ValidationBuilder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DynamicFilter.Models
@@ -10,11 +9,6 @@ namespace DynamicFilter.Models
     public abstract class BaseFilter
     {
         internal Dictionary<string, Func<object, bool>> _predicates = new Dictionary<string, Func<object, bool>>();
-
-        /// <summary>
-        /// An instance of validation builder class
-        /// </summary>
-        protected FilterValidationBuilder ValidationBuilder { get => new FilterValidationBuilder(_predicates); }
 
         /// <summary>
         /// Configuration method for validation
