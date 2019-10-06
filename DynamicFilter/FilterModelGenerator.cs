@@ -29,8 +29,7 @@ namespace DynamicFilter
             foreach (var prop in props)
             {
                 var propertyAttributes = prop.GetCustomAttributes(typeof(FilterMethodAttribute), false);
-                if (propertyAttributes?.Any() != true)
-                    continue;
+
                 foreach (FilterMethodAttribute methodAttribute in propertyAttributes)
                 {
                     //Custom Validations
