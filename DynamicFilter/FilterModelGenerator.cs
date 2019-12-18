@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using DynamicFilter.Models;
 using DynamicFilter.Attributes;
+using DynamicFilter.Exceptions;
 
 namespace DynamicFilter
 {
@@ -18,7 +19,7 @@ namespace DynamicFilter
             var classAttributes = typeof(T).GetCustomAttributes(typeof(FilterForAttribute), false);
             var filterForAttribute = classAttributes.FirstOrDefault() as FilterForAttribute;
             if (filterForAttribute == null)
-                throw new Exception("Filter not applied"); //TODO: Create custom FilterNotAppliedException
+                throw new FilterException("FilterFor attribute not applied");
 
             _forType = filterForAttribute.ForType;
 

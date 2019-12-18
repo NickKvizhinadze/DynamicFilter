@@ -27,7 +27,6 @@ namespace DynamicFilter.Models
         #region Methods
         internal bool IsValid()
         {
-            //TODO: Save invaled fields and error messages
             if (string.IsNullOrEmpty(PropertyName))
                 return false;
 
