@@ -10,7 +10,7 @@ namespace DynamicFilter.Extentions
             {
                 return list.Count == 0;
             }
-            return true;
+            return false;
         }
     }
 }
