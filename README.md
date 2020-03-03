@@ -4,7 +4,7 @@ A package for filtering queries or arrays.
 
 ### Installation
 
-Install with Bitbucket
+Install with Nuget
 
 ```
 Coming Soon
