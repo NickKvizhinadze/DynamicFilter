@@ -7,7 +7,7 @@ A package for filtering queries or arrays.
 Install with Nuget
 
 ```
-Coming Soon
+Install-Package DynamicFilter -Version 1.0.0
 ```
 
 - [Dynamic Filter ](#dynamic-filter)
