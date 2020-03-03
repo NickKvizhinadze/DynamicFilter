@@ -15,6 +15,7 @@ Coming Soon
   - [Getting started](#getting-started)
     - [Filter Methods](#filter-methods)
     - [Create filter model](#create-filter-model)
+    - [Use filter](#use-filter)
 
 ### Getting started
 
@@ -65,4 +66,12 @@ sample of filter model
         [FilterMethod(FilterMethods.GreaterThanOrEqual, nameof(Product.ReceiveDate))]
         public DateTime? ReceiveDateFrom { get; set; }
     }
+```
+
+#### Use filter
+
+filtering data
+
+```csharp
+    IQueryable<Product> result = FilterHelper.Filter(productFilter, ProductsList.AsQueryable());
 ```
